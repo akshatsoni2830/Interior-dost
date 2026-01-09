@@ -89,16 +89,17 @@ export default function UploadComponent({
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="space-y-4">
-        {/* File Input (hidden) */}
+        {/* File Input (hidden) - with camera support */}
         <input
           ref={fileInputRef}
           type="file"
           accept={acceptedFormats.join(',')}
+          capture="environment"
           onChange={handleFileChange}
           disabled={disabled}
           className="hidden"
           data-testid="file-input"
-          aria-label="Upload room image"
+          aria-label="Upload or capture room image"
           // Requirement 1.2: Prevent multiple file selection
           multiple={false}
         />
@@ -120,17 +121,17 @@ export default function UploadComponent({
               border-2 border-dashed rounded-xl p-6 sm:p-8 md:p-10 text-center cursor-pointer
               transition-all duration-300 ease-in-out
               ${disabled 
-                ? 'opacity-50 cursor-not-allowed bg-gray-100' 
-                : 'hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300'
+                ? 'opacity-50 cursor-not-allowed bg-stone-100' 
+                : 'hover:border-amber-600 hover:bg-amber-50/50 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-amber-300'
               }
-              ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'}
+              ${error ? 'border-red-500 bg-red-50' : 'border-stone-300'}
             `}
             data-testid="upload-area"
           >
             <div className="space-y-3">
               <svg
                 className={`mx-auto h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 transition-colors duration-300 ${
-                  disabled ? 'text-gray-400' : 'text-blue-500'
+                  disabled ? 'text-stone-400' : 'text-amber-600'
                 }`}
                 stroke="currentColor"
                 fill="none"
@@ -144,11 +145,14 @@ export default function UploadComponent({
                   strokeLinejoin="round"
                 />
               </svg>
-              <div className="text-sm sm:text-base text-gray-700">
-                <span className="font-bold text-blue-600 hover:text-blue-700">Click to upload</span> or drag and drop
+              <div className="text-sm sm:text-base text-stone-700">
+                <span className="font-bold text-amber-700 hover:text-amber-800">Click to upload or take photo</span>
               </div>
-              <p className="text-xs sm:text-sm text-gray-500">
+              <p className="text-xs sm:text-sm text-stone-500">
                 {acceptedFormats.map(f => f.replace('image/', '').toUpperCase()).join(', ')} up to {maxSizeMB}MB
+              </p>
+              <p className="text-xs text-stone-400">
+                📷 Camera available on mobile devices
               </p>
             </div>
           </div>
@@ -174,21 +178,21 @@ export default function UploadComponent({
         {/* Preview Display - Requirement 1.4 */}
         {previewUrl && (
           <div className="space-y-4 animate-fade-in">
-            <div className="relative rounded-xl overflow-hidden border-2 border-blue-500 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="relative rounded-xl overflow-hidden border-2 border-amber-600 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <img
                 src={previewUrl}
                 alt="Preview of uploaded room"
                 className="w-full h-auto"
                 data-testid="image-preview"
               />
-              <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-green-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md">
+              <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-green-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md">
                 ✓ Uploaded
               </div>
             </div>
             <button
               onClick={handleClear}
               disabled={disabled}
-              className="w-full px-4 sm:px-5 py-3 bg-gray-200 text-gray-800 font-medium text-sm sm:text-base rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-300"
+              className="w-full px-4 sm:px-5 py-3 bg-stone-200 text-stone-800 font-medium text-sm sm:text-base rounded-lg hover:bg-stone-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-stone-300"
               data-testid="clear-button"
               aria-label="Clear uploaded image and upload a different one"
             >

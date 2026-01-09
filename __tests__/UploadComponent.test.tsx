@@ -191,6 +191,27 @@ describe('UploadComponent', () => {
       expect(input.hasAttribute('multiple')).toBe(false);
     });
 
+    /**
+     * Test that camera capture is enabled for mobile devices
+     * v2.1 Feature: Real camera capture support
+     */
+    test('file input should have capture attribute for camera support', () => {
+      const mockCallback = jest.fn();
+      
+      render(
+        <UploadComponent
+          onImageSelected={mockCallback}
+          maxSizeMB={10}
+          acceptedFormats={['image/jpeg', 'image/png']}
+        />
+      );
+
+      const input = screen.getByTestId('file-input') as HTMLInputElement;
+      
+      // Verify capture attribute is set to "environment" for rear camera
+      expect(input.getAttribute('capture')).toBe('environment');
+    });
+
     test('should only process first file when multiple files are somehow provided', async () => {
       const mockCallback = jest.fn();
       

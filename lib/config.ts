@@ -4,9 +4,9 @@
  */
 
 export interface AppConfig {
-  replicateApiToken: string;
-  visionProvider: 'gemini' | 'openai';
+  pollinationsApiKey?: string;
   geminiApiKey?: string;
+  visionProvider: 'gemini' | 'openai';
   openaiApiKey?: string;
   demoMode: boolean;
 }
@@ -16,17 +16,13 @@ export interface AppConfig {
  * Throws error if required variables are missing
  */
 export function loadConfig(): AppConfig {
-  const replicateApiToken = process.env.REPLICATE_API_TOKEN;
   const visionProvider = (process.env.VISION_PROVIDER || 'gemini') as 'gemini' | 'openai';
+  const pollinationsApiKey = process.env.POLLINATIONS_API_KEY;
   const geminiApiKey = process.env.GEMINI_API_KEY;
   const openaiApiKey = process.env.OPENAI_API_KEY;
   const demoMode = process.env.DEMO_MODE === 'true';
 
-  // Validate required variables
-  if (!replicateApiToken) {
-    throw new Error('Missing required environment variable: REPLICATE_API_TOKEN');
-  }
-
+  // Validate required variables based on providers
   if (visionProvider === 'gemini' && !geminiApiKey) {
     throw new Error('Missing required environment variable: GEMINI_API_KEY (required when VISION_PROVIDER=gemini)');
   }
@@ -36,9 +32,9 @@ export function loadConfig(): AppConfig {
   }
 
   return {
-    replicateApiToken,
-    visionProvider,
+    pollinationsApiKey,
     geminiApiKey,
+    visionProvider,
     openaiApiKey,
     demoMode,
   };
@@ -58,10 +54,6 @@ export function getApiKey(keyName: string): string | undefined {
 export function validateEnvironment(): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  if (!process.env.REPLICATE_API_TOKEN) {
-    errors.push('REPLICATE_API_TOKEN is required');
-  }
-
   const visionProvider = process.env.VISION_PROVIDER || 'gemini';
   
   if (visionProvider === 'gemini' && !process.env.GEMINI_API_KEY) {
@@ -70,6 +62,11 @@ export function validateEnvironment(): { valid: boolean; errors: string[] } {
 
   if (visionProvider === 'openai' && !process.env.OPENAI_API_KEY) {
     errors.push('OPENAI_API_KEY is required when VISION_PROVIDER=openai');
+  }
+
+  // Pollinations API key is optional - app works without it
+  if (!process.env.POLLINATIONS_API_KEY) {
+    console.warn('[Config] POLLINATIONS_API_KEY not set - using free tier (works but with basic features)');
   }
 
   return {

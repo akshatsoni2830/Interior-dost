@@ -27,11 +27,17 @@ export interface RoomContext {
 export type VibePreset = 'modern' | 'traditional' | 'minimalist' | 'bohemian';
 
 /**
+ * Target room function for empty room transformations
+ */
+export type RoomFunction = 'dining_room' | 'bedroom' | 'living_room' | 'home_office' | null;
+
+/**
  * User's redesign intent - either free text or preset
  */
 export interface UserIntent {
   text: string;               // Free-form user input
   preset?: VibePreset;        // Optional quick selection
+  targetFunction?: RoomFunction; // Target function for empty rooms
 }
 
 // ============================================================================
@@ -46,6 +52,7 @@ export interface OptimizedPrompt {
   negative: string;           // Full SDXL negative prompt
   metadata: {
     room_type: string;
+    target_function?: RoomFunction; // Target function if specified
     constraints: string[];    // Applied constraints for transparency
   };
 }
@@ -60,14 +67,21 @@ export interface OptimizedPrompt {
 export type ControlNetType = 'canny' | 'depth';
 
 /**
+ * Image generator provider
+ */
+export type ImageGenerator = 'gemini' | 'pollinations';
+
+/**
  * Configuration for image generation via Replicate
  */
 export interface GenerationConfig {
   prompt: string;             // Positive prompt
   negative_prompt: string;    // Negative prompt
   control_image: string;      // Base64 encoded image
+  image?: string;             // Alias for control_image (for compatibility)
   controlnet_type: ControlNetType;
   num_outputs: 1;             // Always 1 for MVP
+  generator?: ImageGenerator; // Generator to use (gemini or pollinations)
 }
 
 // ============================================================================

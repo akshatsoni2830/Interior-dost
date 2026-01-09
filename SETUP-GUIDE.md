@@ -1,4 +1,4 @@
-# 🚀 Quick Setup Guide - Interior-Dost
+# 🚀 Quick Setup Guide - Interior-Dost v2.1
 
 Get your Interior-Dost app running in 5 minutes!
 
@@ -15,69 +15,46 @@ cd interior-dost
 npm install
 ```
 
-## Step 2: Get Your API Keys
+## Step 2: Get Your API Key
 
-You need 2 API keys to run the app:
+**Good news!** You only need ONE API key for v2.1:
 
-### 🔑 API Key 1: Image Generation (Choose ONE)
-
-#### Option A: Hugging Face (FREE - Recommended for Students!) ⭐
-
-**What it does:** Generates the redesigned room images using AI
-
-**Cost:** **100% FREE!** No credit card required!
-
-**How to get it:**
-1. Go to [huggingface.co](https://huggingface.co/)
-2. Click "Sign up" (top right)
-3. Sign up with GitHub or email
-4. Go to [Settings → Access Tokens](https://huggingface.co/settings/tokens)
-5. Click "New token"
-6. Name it `interior-dost-app`, select role: **Read**
-7. Click "Generate token"
-8. Copy the token (starts with `hf_...`)
-
-**Perfect for:** Students, testing, demos, hackathons!
-
-📖 **Detailed guide:** See [HUGGINGFACE-SETUP.md](./HUGGINGFACE-SETUP.md)
-
----
-
-#### Option B: Replicate (Paid - Better Quality)
-
-**What it does:** Generates the redesigned room images using AI
-
-**Cost:** ~$0.01-0.03 per image (pay as you go)
-
-**How to get it:**
-1. Go to [replicate.com](https://replicate.com/)
-2. Click "Sign up" (top right)
-3. Sign up with GitHub or email
-4. Once logged in, go to [Account Settings](https://replicate.com/account/api-tokens)
-5. Click "Create token" or copy your default token
-6. Copy the token (starts with `r8_...`)
-
-**⚠️ Important:** You need to add credit to your Replicate account:
-1. After creating your account, go to [Billing](https://replicate.com/account/billing)
-2. Click "Add credit" 
-3. Add **$1-5** (even $1 works! See [STUDENT-BUDGET-GUIDE.md](./STUDENT-BUDGET-GUIDE.md))
-   - $1 = 30-100 images (perfect for testing/demos)
-   - $5 = 150-500 images (for extensive testing)
-4. Wait 2-3 minutes for credit to be available
-
----
-
-### 🔑 API Key 2: Vision AI (Choose ONE)
+### 🔑 Google Gemini Vision API (FREE!)
 
 **What it does:** Analyzes room images to understand the space
 
-#### Option A: Google Gemini (Recommended - Has Free Tier)
+**Cost:** **100% FREE!** 1500 requests per day on free tier
 
 **How to get it:**
 1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Sign in with your Google account
 3. Click "Get API Key" or "Create API Key"
 4. Click "Create API key in new project"
+5. Copy the API key (starts with `AIza...`)
+
+**Perfect for:** Everyone! No credit card required.
+
+---
+
+### 🎨 Image Generation (No API Key Needed!)
+
+**What it does:** Generates the redesigned room images using AI
+
+**Service:** Pollinations.ai SDXL Turbo
+
+**Cost:** **100% FREE!** No API key required!
+
+**How it works:**
+- Interior-Dost v2.1 uses Pollinations.ai automatically
+- No setup needed - it just works!
+- ~3.3k free images available
+- Fast SDXL Turbo model
+
+**Perfect for:** Students, testing, demos, hackathons!
+
+---
+
+### 🔑 Alternative: OpenAI GPT-4 Vision (Optional, Paid)
 5. Copy the key (starts with `AIza...`)
 
 **Cost:** FREE for first 60 requests/minute, then ~$0.001 per image
@@ -100,43 +77,54 @@ You need 2 API keys to run the app:
 1. In the `interior-dost` folder, copy the example file:
    ```bash
    cp .env.example .env
+**If you want to use OpenAI instead of Gemini for vision:**
+
+**Cost:** Paid (GPT-4 Vision API)
+
+**How to get it:**
+1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Sign in or create an account
+3. Click "Create new secret key"
+4. Copy the key (starts with `sk-...`)
+
+---
+
+## Step 3: Configure Environment
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
    ```
 
 2. Open the `.env` file in your editor
 
-3. Paste your API keys:
+3. Paste your Gemini API key:
 
-   **If using Hugging Face (FREE) + Gemini (FREE):** ⭐ RECOMMENDED
+   **Recommended Setup (FREE!):** ⭐
    ```env
-   # Image Generation (FREE!)
-   IMAGE_PROVIDER=huggingface
-   HUGGINGFACE_API_TOKEN=hf_your_huggingface_token_here
-   
    # Vision AI (FREE!)
    GEMINI_API_KEY=AIza_your_gemini_key_here
    VISION_PROVIDER=gemini
+   
+   # Image Generation (FREE - No API key needed!)
+   # Pollinations.ai SDXL Turbo is used automatically
+   IMAGE_GENERATOR=pollinations
+   
+   # Optional: Demo Mode
+   DEMO_MODE=false
    ```
 
-   **If using Replicate (Paid) + Gemini (FREE):**
+   **Alternative Setup (OpenAI Vision):**
    ```env
-   # Image Generation (Paid)
-   IMAGE_PROVIDER=replicate
-   REPLICATE_API_TOKEN=r8_your_replicate_token_here
-   
-   # Vision AI (FREE!)
-   GEMINI_API_KEY=AIza_your_gemini_key_here
-   VISION_PROVIDER=gemini
-   ```
-
-   **If using Replicate (Paid) + OpenAI (Paid):**
-   ```env
-   # Image Generation (Paid)
-   IMAGE_PROVIDER=replicate
-   REPLICATE_API_TOKEN=r8_your_replicate_token_here
-   
    # Vision AI (Paid)
    OPENAI_API_KEY=sk_your_openai_key_here
    VISION_PROVIDER=openai
+   
+   # Image Generation (FREE - No API key needed!)
+   IMAGE_GENERATOR=pollinations
+   
+   # Optional: Demo Mode
+   DEMO_MODE=false
    ```
 
 4. Save the file
@@ -157,17 +145,18 @@ You should see:
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You should see the Interior-Dost interface! 🎉
+You should see the Interior-Dost landing page! 🎉
 
 ---
 
 ## 🧪 Test the App
 
-1. **Upload a room image** (jpg or png, max 10MB)
-2. **Choose a style** (modern, traditional, minimalist, or bohemian)
-3. **Click "Redesign"**
-4. **Wait 30-60 seconds** for the AI to work its magic
-5. **View results** - before/after images + furniture suggestions
+1. **Click "Start Designing"** to go to the design tool
+2. **Upload a room image** (jpg or png, max 10MB) or take a photo with your mobile camera
+3. **Choose a style** (modern, traditional, minimalist, or bohemian)
+4. **Click "Redesign My Room"**
+5. **Wait 30-60 seconds** for the AI to work its magic
+6. **View results** - before/after images with geometry-preserved redesign + furniture suggestions
 
 ---
 

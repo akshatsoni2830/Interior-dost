@@ -88,6 +88,27 @@ describe('Prompt Optimizer', () => {
     );
   });
 
+  test('Property 6.1: Geometry Lock Constraints (v2.1)', () => {
+    fc.assert(
+      fc.property(
+        userIntentArb,
+        roomContextArb,
+        (intent: UserIntent, context: RoomContext) => {
+          const result = optimizePrompt(intent, context);
+          const positiveLower = result.positive.toLowerCase();
+          
+          // CRITICAL: Verify geometry lock constraints are present (v2.1)
+          expect(positiveLower.includes('exact room geometry preserved')).toBe(true);
+          expect(positiveLower.includes('same camera angle')).toBe(true);
+          expect(positiveLower.includes('same room dimensions')).toBe(true);
+          expect(positiveLower.includes('no wall movement')).toBe(true);
+          expect(positiveLower.includes('no window relocation')).toBe(true);
+        }
+      ),
+      { numRuns: 100 }
+    );
+  });
+
   describe('Unit Tests - Edge Cases', () => {
     test('should use default Indian home aesthetic for empty intent', () => {
       const emptyIntent: UserIntent = { text: '' };
